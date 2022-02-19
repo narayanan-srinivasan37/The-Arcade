@@ -1,0 +1,15 @@
+POST http://localhost:3002/api
+Content-Type: application/json
+
+{
+"email":"narayanan@test.com",
+"password":"bethechange@1"
+}
+
+
+###
+GET  http://localhost:5000/api/cart
+
+{
+    "userid":1,
+}

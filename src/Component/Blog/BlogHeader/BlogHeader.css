@@ -1,0 +1,27 @@
+.blog-header {
+  width: 100%;
+  object-fit: cover;
+}
+.image-size {
+  width: 100%;
+  object-fit: cover;
+}
+
+.review_headStyle {
+  color: white;
+  background-color: red;
+  width: 4rem;
+  height: 1.5rem;
+  position: absolute;
+  text-align: center;
+  left: 2rem;
+}
+.headReview-title {
+  overflow: hidden;
+  padding: 10px 20px 13px;
+  margin-bottom: 0;
+  color: whitesmoke;
+  text-decoration: none;
+  font-size: 1.5rem;
+  text-align: center;
+}

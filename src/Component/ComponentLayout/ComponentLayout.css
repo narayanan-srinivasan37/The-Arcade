@@ -1,0 +1,40 @@
+.main-content {
+  display: flex;
+  max-width: 100%;
+
+  padding: 0.4rem 0 0;
+  margin: 0 0.3rem;
+}
+.section-content {
+  width: 100%;
+  margin-top: 0px;
+  position: relative;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 900px) and (min-width: 501px) {
+  .main-content {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .section-content {
+    width: 100%;
+    margin-top: 0px;
+    position: relative;
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .main-content {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .section-content {
+    width: 100%;
+    margin-top: 0px;
+    position: relative;
+    flex-direction: column;
+    margin-bottom: 15%;
+  }
+}

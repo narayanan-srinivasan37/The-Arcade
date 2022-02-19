@@ -1,0 +1,22 @@
+.shorts-view {
+  background-color: whitesmoke;
+  display: flex;
+  max-width: 100%;
+  margin: 1.3rem 1rem 0rem 1rem;
+}
+.img-style{
+    margin: auto auto;
+    
+}
+
+@media screen and (max-width: 800px) {
+  .shorts-view {
+    max-width: 100%;
+    flex-wrap: wrap;
+    margin: 1.3rem 1rem 2rem 1rem;
+  }
+  .img-style {
+    margin: auto auto;
+    max-width: 100%;
+  }
+}

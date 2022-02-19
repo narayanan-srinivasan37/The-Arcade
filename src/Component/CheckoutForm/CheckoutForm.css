@@ -1,0 +1,14 @@
+.checkout-form-div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  place-items: center;
+  height: 90vh;
+}
+
+.checkout-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
