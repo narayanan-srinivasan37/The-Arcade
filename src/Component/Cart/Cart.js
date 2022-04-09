@@ -6,15 +6,12 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { BsCartDash } from "react-icons/bs";
 import { formatCurrency } from "./../../HelperFunctions/FormatCurrency";
-const getTotalList = (total, GST, shipping_charges) => [
+const getTotalList = (total,  shipping_charges) => [
   {
     name: "Total",
     value: total,
   },
-  {
-    name: "GST",
-    value: GST,
-  },
+
   {
     name: "Shipping Charges",
     value: shipping_charges,
@@ -60,12 +57,12 @@ const Cart = ({ cart }) => {
       </div>
       <div style={{ minWidth: "30%" }}>
         <div className="billing ">
-          <Typography style={{ padding: "0.3rem 0 0.3rem 0" }} variant="h5">
+          <h3 style={{}} >
             Billing Details:
-          </Typography>
+          </h3>
           <div className="side-box">
             <Typography className="price-list" variant="h6">
-              Price Details({})
+              Price Details
             </Typography>
 
             <ul className="sub-total">
@@ -86,6 +83,7 @@ const Cart = ({ cart }) => {
         </div>
         <div className="place-order">
           <div style={{ padding: " 0.5rem 1rem" }}>
+            <div>
             <button
               onClick={() => {
                 navigate("/checkout");
@@ -95,6 +93,7 @@ const Cart = ({ cart }) => {
             >
               Place Order
             </button>
+            </div>
           </div>
         </div>
       </div>

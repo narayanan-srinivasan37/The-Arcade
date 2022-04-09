@@ -10,8 +10,9 @@ import { checkisLoggedIn } from "../ReduxStore/Reducers/AuthReducer";
 import CheckoutPage from "../Pages/CheckoutPage/CheckoutPage";
 import PrivateRoute from "./PrivateRoutes";
 import CartPage from "../Pages/CartPage/CartPage";
-import PaymentPage from "../Pages/PaymentPage/PaymentPage";
 import BlogViewPage from "../Pages/BlogViewPage/BlogViewPage";
+import BlogCreatePage from "../Pages/BlogCreatePage/BlogCreatePage";
+import BlogEditPage from "../Pages/BlogEditPage/BlogEditPage";
 import ProductsViewPage from "../Pages/ProductsViewPage/ProductsViewPage";
 const PageRoutes = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,6 @@ const PageRoutes = () => {
       await dispatch(checkisLoggedIn());
     }
     checkLogin();
-    console.log("isLogin");
   }, [dispatch]);
 
   return (
@@ -33,7 +33,24 @@ const PageRoutes = () => {
         <Route path="/blog/:id" exact element={<BlogViewPage />} />
         <Route path="/store" exact element={<ProductPage />} />
         <Route path="/store/:id" exact element={<ProductsViewPage />} />
-
+        <Route
+          path="/blog/create"
+          exact
+          element={
+            <PrivateRoute>
+              <BlogCreatePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/blog/:id/edit"
+          exact
+          element={
+            <PrivateRoute>
+              <BlogEditPage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="store/cart"
           exact
@@ -52,15 +69,13 @@ const PageRoutes = () => {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/checkout/payment"
+        <Route    path="/myorders"
           exact
           element={
             <PrivateRoute>
-              <PaymentPage />
+              <CheckoutPage />
             </PrivateRoute>
-          }
-        />
+          }/>
       </Routes>
     </Router>
   );

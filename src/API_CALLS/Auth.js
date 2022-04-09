@@ -12,6 +12,7 @@ export const login = async (credentials) => {
 export const register = async (credentials) => {
   try {
     const response = await API.post("auth/register", credentials);
+  
     return response.data;
   } catch (err) {
     throw err;
@@ -32,7 +33,6 @@ export const isLoggedIn = async () => {
 export const logoutUser = async () => {
   try {
     const response = await API.delete("auth/logout");
-    console.log(response)
     return response.data;
   } catch (err) {
     throw err;

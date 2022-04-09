@@ -12,7 +12,7 @@
 }
 .pay-button {
   padding: 0.7rem 2rem;
-  width: 100%;
+  max-width: 100%;
   margin: 1rem 0;
   color: white;
   font-weight: bold;

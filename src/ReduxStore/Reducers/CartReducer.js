@@ -34,7 +34,7 @@ export const updateACartItem = createAsyncThunk(
   "cart/updateCartItem",
   async (params, thunkAPI) => {
     const state = thunkAPI.getState();
-    console.log(state)
+    
     const response = await updateCartItem(params);
     return response;
   }

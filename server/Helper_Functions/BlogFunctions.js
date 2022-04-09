@@ -14,12 +14,14 @@ const findBlogById = async (id) => {
 };
 const findAllBlogs = async () => {
   try {
+   
     const allBlogs = await pool.query("SELECT * from blog");
     if (allBlogs.rows?.length) {
       return allBlogs.rows;
     }
     return [];
   } catch (err) {
+   
     throw createError(500, err);
   }
 };
@@ -44,7 +46,7 @@ const editABlog = async (content, title, description, id, user_id) => {
    
     if (editBlog.rowCount !== 0) {
       const blog = await findBlogById(id);
-      console.log(blog)
+    
       return blog;
     }
     return [];

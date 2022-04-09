@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import { Form, Formik, useFormik } from "formik";
-
 import TextField from "@mui/material/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import Button from "@mui/material/Button";
-import GoogleLogin from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../ReduxStore/Reducers/AuthReducer";
 import { useNavigate, Link } from "react-router-dom";
 import "./LoginForm.css";
 const LoginForm = () => {
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleGoogleLogin = async () => {};
-
   const validate = (values) => {
     const errors = {};
     if (!values.password) {
@@ -43,12 +37,13 @@ const LoginForm = () => {
       try {
         setLoading(true);
         const response = await dispatch(loginUser(credentials));
-        if (response.payload !== undefined) navigate("/");
       } catch (err) {
         setLoading(false);
       }
     },
   });
+
+  if (isAuthenticated) navigate("/");
 
   return (
     <div className="login-form-div">
@@ -63,6 +58,7 @@ const LoginForm = () => {
         >
           Login
         </p>
+        {error ? <p style={{color:'red'}}>Incorrect username or password</p> : null}
         <form className="login-form" onSubmit={formik.handleSubmit}>
           <TextField
             style={{ paddingBottom: "1rem" }}
@@ -99,22 +95,6 @@ const LoginForm = () => {
             Register
           </Link>
         </p>
-        <p>Or Sign up using</p>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingBottom: "1rem",
-          }}
-        >
-          <GoogleLogin
-            clientId={process.env.GOOGLE_CLIENT_ID}
-            buttonText="Log in with Google"
-            onSuccess={handleGoogleLogin}
-            onFailure={handleGoogleLogin}
-          />
-        </div>
       </div>
     </div>
   );

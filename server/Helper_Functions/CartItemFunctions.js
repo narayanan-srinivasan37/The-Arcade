@@ -27,13 +27,14 @@ const getCartItems = async (userId) => {
 
 const addCartItems = async (cart_id, product_id, quantity) => {
   try {
+    
     const cart = await pool.query(
       `INSERT INTO cartitems(cartid, productid, qty) VALUES($1, $2, $3) 
                 ON CONFLICT(cartid, productid)
                 DO UPDATE set qty = cartitems.qty+1 `,
       [cart_id, product_id, quantity]
     );
-
+ 
     const cartItems = await pool.query(
       `SELECT ci.qty,ci.cartid AS cartitemId,ci.id AS cartId,  products.*, round(products.price * ci.qty, 2) AS subtotal FROM cartitems as ci
             INNER JOIN products products ON products.id = ci.productid
@@ -46,19 +47,19 @@ const addCartItems = async (cart_id, product_id, quantity) => {
     }
     return [];
   } catch (err) {
-    console.log(err);
+  
     throw createError(500, err);
   }
 };
 
 const deleteCartItem = async (cart_id, product_id) => {
   try {
-    console.log(cart_id, product_id);
+ 
     const deleteItems = await pool.query(
       "DELETE from cartitems WHERE cartid = $1 AND productid = $2 returning *",
       [cart_id, product_id]
     );
-    console.log(deleteItems);
+    
     const cartItems = await pool.query(
       `SELECT ci.qty,ci.cartid AS cartitemId, ci.id AS cartId,  products.*, 
       round(products.price * ci.qty, 2) AS subtotal FROM cartitems as ci
@@ -68,11 +69,20 @@ const deleteCartItem = async (cart_id, product_id) => {
     );
     return cartItems.rows;
   } catch (err) {
-    cart_id.log(err);
+   
     throw createError(500, err);
   }
 };
-
+const deleteItems  = async(cart_id)=>{
+  try{
+    const deleteItems = await pool.query("DELETE from cartitems WHERE cartid = $1 returning *",[cart_id] )
+    return deleteItems
+  }
+  catch(err)
+  {
+    throw createError(500, err);
+  }
+}
 const updateCartItem = async (cart_id, product_id, quantity) => {
   try {
     const cartUpdate = await pool.query(
@@ -96,4 +106,4 @@ const updateCartItem = async (cart_id, product_id, quantity) => {
   }
 };
 
-module.exports = { getCartItems, addCartItems, deleteCartItem, updateCartItem };
+module.exports = { getCartItems, addCartItems, deleteCartItem, updateCartItem , deleteItems};

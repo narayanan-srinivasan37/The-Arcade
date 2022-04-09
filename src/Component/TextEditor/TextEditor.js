@@ -12,7 +12,7 @@ import FormatAlignCenterIcon from "@material-ui/icons/FormatAlignCenter";
 import FormatAlignJustifyIcon from "@material-ui/icons/FormatAlignJustify";
 import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
 import FormatAlignRightIcon from "@material-ui/icons/FormatAlignRight";
-import handlePastedText from "../../utils/handlePastedTextUtil";
+import {handlePastedText} from "../../utils/handlePastedTextUtil";
 import ImageIcon from "@material-ui/icons/Image";
 const StyleButton = (props) => {
   const onToggle = (e) => {

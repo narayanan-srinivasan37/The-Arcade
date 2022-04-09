@@ -41,6 +41,7 @@ const findOneById = async (id) => {
         firstName: user.rows[0].firstname,
         lastName: user.rows[0].lastname,
         cart_id: cart.id,
+        roles: user.rows[0].roles,
       };
       return value;
     } else throw new Error(401, "Unauthorized");
@@ -54,8 +55,8 @@ const findOneByEmail = async (userEmail) => {
     const user = await pool.query("SELECT * from  users where email = $1", [
       userEmail,
     ]);
-
-    return user.rows[0];
+    
+    return user?.rows?.length ? user.rows[0] : user.rows;
   } catch (err) {
     throw createError(500, "Internal Server Error");
   }
@@ -76,13 +77,14 @@ const authenticateUser = async (email, password) => {
       throw createError(401, "Incorrect username or password");
     } else {
       const cart = await findOneByUserId(user.id);
-     
+
       return {
         email: user.email,
         id: user.id,
         firstName: user.firstname,
         lastName: user.lastname,
-        cartid: cart.id,
+        cart_id: cart.id,
+        roles: user.roles,
       };
     }
   } catch (err) {
@@ -92,8 +94,8 @@ const authenticateUser = async (email, password) => {
 
 const createUser = async (email, password, firstName, lastName) => {
   try {
+   
     const user = await findOneByEmail(email);
-
     if (user.length !== 0) {
       throw createError(409, "Email already in use");
     }
@@ -105,8 +107,8 @@ const createUser = async (email, password, firstName, lastName) => {
       "insert into users (email, password, firstname, lastname, roles) values($1, $2, $3, $4, $5) returning *",
       [email, hashpassword, firstName, lastName, roles]
     );
+
     if (addUser.rows !== undefined) {
-      
       const cart = await createCart(addUser.rows[0].id);
 
       return {
@@ -115,6 +117,7 @@ const createUser = async (email, password, firstName, lastName) => {
         firstName: addUser.rows[0].firstname,
         lastName: addUser.rows[0].lastname,
         cart_id: cart.id,
+        roles: addUser.rows[0].roles,
       };
     } else {
       throw createError(401, "Unauthorized");
@@ -146,7 +149,9 @@ const googleLogin = async (token) => {
       id: userData.id,
       firstName: userData.firstname,
       lastName: userData.lastname,
+      roles: userData.roles,
       cart_id: cart.id,
+    
     };
   } catch (err) {
     throw createError(500, err);

@@ -5,6 +5,7 @@ export const allCartItems = async (id) => {
     const response = await API.get("/cart", {
       id,
     });
+   
     return response.data;
   } catch (err) {
     throw err;

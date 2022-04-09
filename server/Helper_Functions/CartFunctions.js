@@ -11,7 +11,7 @@ const createCart = async (userId) => {
       values($1,$2, $3 ) returning *`,
       [userId, created, modified]
     );
-    console.log(cart)
+
     if (cart.rows?.length) {
       return cart.rows[0];
     }

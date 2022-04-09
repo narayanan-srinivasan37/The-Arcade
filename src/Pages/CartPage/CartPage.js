@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, {  useEffect } from "react";
 import Cart from "../../Component/Cart/Cart";
 import { getAllCartItems } from "../../ReduxStore/Reducers/CartReducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +9,9 @@ const CartPage = () => {
   const { cart, isLoading, isError } = useSelector((state) => {
     return state.cart;
   });
+  const {user} = useSelector(state=>state.auth)
   useEffect(() => {
-    dispatch(getAllCartItems());
+    dispatch(getAllCartItems(user.id));
   }, []);
   if (isLoading) {
     return (

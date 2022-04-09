@@ -23,8 +23,15 @@ const BlogViewPage = () => {
       </ComponentLayout>
     );
   }
-  console.log(blog);
-  return <ComponentLayout>{blog && <BlogView blog={blog} />}</ComponentLayout>;
+  const NoBlogData = () => {
+    return <p>No Blog Available</p>;
+  };
+
+  return (
+    <ComponentLayout>
+      {blog.length ? <BlogView blog={blog} /> : <NoBlogData />}
+    </ComponentLayout>
+  );
 };
 
 export default BlogViewPage;

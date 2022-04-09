@@ -3,13 +3,15 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import "./CheckoutForm.css";
 import { TextField, Button } from "@material-ui/core";
-const CheckoutForm = () => {
+const CheckoutForm = ({ next }) => {
   const [loading, setLoading] = useState(false);
+  const [errors, showErrors] = useState(false)
   const navigate = useNavigate();
   const initialValues = {
     firstName: "",
     lastName: "",
     street_address: "",
+    phoneNumber: "",
     city: "",
     state: "",
     zip_code: "",
@@ -32,9 +34,18 @@ const CheckoutForm = () => {
     if (!values.state) {
       errors.state = "Required";
     }
+    if (!values.phoneNumber) {
+      errors.phoneNumber = "Required";
+    }
+   
+    if (!/[0-9]{3}[0-9]{3}[0-9]{4}/.test(values.phoneNumber)) {
+      errors.phoneNumber = "Invalid phone number";
+    }
     if (!values.zip_code) {
       errors.zip_code = "Required";
-    } else if (/^\d{3}\s?\d{3}$/.test(values.zip_code)) {
+    }
+  
+    if (!/^[1-9]{1}[0-9]{2}[0-9]{3}$/.test(values.zip_code)) {
       errors.zip_code = "Wrong pincode";
     }
 
@@ -44,11 +55,11 @@ const CheckoutForm = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validate: validate,
-    onSubmit: async (values) => {
+    onSubmit: async (values, errors) => {
+      
       try {
-        setLoading(true);
-        navigate("/checkout/payment");
-        setLoading(false);
+       
+        next(values);
       } catch (err) {
         setLoading(false);
       }
@@ -57,6 +68,7 @@ const CheckoutForm = () => {
 
   return (
     <div className="checkout-form-div">
+      
       <form className="checkout-form" onSubmit={formik.handleSubmit}>
         <TextField
           style={{ paddingBottom: "1rem" }}
@@ -70,6 +82,9 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.firstName}
         />
+        {formik.errors.firstName ? (
+          <div className="address-form-err">{formik.errors.firstName}</div>
+        ) : null}
         <TextField
           style={{ paddingBottom: "1rem" }}
           id="lastName"
@@ -82,6 +97,25 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.lastName}
         />
+        {formik.errors.lastName ? (
+          <div className="address-form-err">{formik.errors.lastName}</div>
+        ) : null}
+        <TextField
+          style={{ paddingBottom: "1rem" }}
+          id="phoneNumber"
+          label="Phone Number"
+          variant="outlined"
+          placeholder="Phone Number"
+          required
+          type="tel"
+          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          autoComplete="none"
+          onChange={formik.handleChange}
+          value={formik.values.phoneNumber}
+        />
+        {formik.errors.phoneNumber ? (
+          <div className="address-form-err">{formik.errors.phoneNumber}</div>
+        ) : null}
         <TextField
           style={{ paddingBottom: "1rem" }}
           id="street_address"
@@ -94,6 +128,9 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.street_address}
         />
+        {formik.errors.street_address ? (
+          <div className="address-form-err">{formik.errors.street_address}</div>
+        ) : null}
         <TextField
           style={{ paddingBottom: "1rem" }}
           id="city"
@@ -106,6 +143,9 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.city}
         />
+        {formik.errors.city ? (
+          <div className="address-form-err">{formik.errors.city}</div>
+        ) : null}
         <TextField
           style={{ paddingBottom: "1rem" }}
           id="state"
@@ -118,6 +158,9 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.state}
         />
+        {formik.errors.state ? (
+          <div className="address-form-err">{formik.errors.state}</div>
+        ) : null}
         <TextField
           style={{ paddingBottom: "1rem" }}
           id="zip_code"
@@ -130,6 +173,10 @@ const CheckoutForm = () => {
           onChange={formik.handleChange}
           value={formik.values.zip_code}
         />
+        {formik.errors.zip_code ? (
+          <div className="address-form-err">{formik.errors.zip_code}</div>
+        ) : null}
+
         <div style={{ paddingTop: "1rem", textDecoration: "none" }}>
           <Button type="submit" variant="outlined">
             Checkout

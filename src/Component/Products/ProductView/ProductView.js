@@ -13,12 +13,13 @@ const ProductView = ({ products }) => {
   const addItemToCart = async () => {
     try {
       if (auth.isAuthenticated) {
+      
         const data = {
-          cart_id: auth.user.user.cartid,
+          cart_id: auth.user.cart_id,
           product_id: products.id,
           quantity: 1,
         };
-
+      
         await dispatch(addACartItem(data));
       } else navigate("/login");
     } catch (err) {

@@ -4,29 +4,61 @@ const stripe = new Stripe(STRIPE_SECRET_KEY);
 const createError = require("http-errors");
 const { createOrder, updateStatus } = require("./OrderFunctions");
 const { createOrderItems } = require("./OrderItemsFunctions");
-const { getCartItems } = require("./CartItemFunctions");
-const payment = async (amount, email, userId) => {
+const { getCartItems , deleteItems} = require("./CartItemFunctions");
+const {findOneByUserId} = require('./CartFunctions')
+const payment = async (amount, email, userId, address) => {
   try {
     const orderCreation = await createOrder({ total: amount, userid: userId });
     const order = await getCartItems(userId);
-    await order.rows.map((item) => {
-      return  createOrderItems({
-        orderId: orderCreation.rows[0].id,
-        ...item,
-      });
-    });
     const result = await stripe.paymentIntents.create({
-      amount,
+      amount: amount * 100,
       currency: "inr",
       payment_method_types: ["card"],
       receipt_email: email,
       metadata: { integration_check: "accept_a_payment" },
     });
-    const statusUpdate = updateStatus({ status: "Complete", userid: userId });
-    return result;
+  
+    return {result, orderId:orderCreation[0].id};
   } catch (error) {
     throw createError(error.StatusCode, error.messageF);
   }
 };
 
-module.exports = payment;
+const paymentSuccess = async (userid, orderid) => {
+  try {
+   
+    const order = await getCartItems(userid);
+  
+    await order.map(async (item, index) => {
+      try {
+        
+        const data = {
+          orderId: orderid,
+          ...item,
+        };
+     
+        return await createOrderItems(data);
+      } catch (err) {
+        throw createError(500, err);
+      }
+    });
+    const statusUpdate = updateStatus({ status: "Completed", userid: userid, orderid:orderid });
+  const cartId = await findOneByUserId(userid)
+ 
+  const deleteCart = await deleteItems(cartId.id)
+  } catch (err) {
+    throw createError(500, err);
+  }
+};
+const paymentFailure = async(userid)=>{
+  try{
+    const statusUpdate = await updateStatus({ status: "Failed", userid: userid });
+    return {status:"Payment Failed"};
+  }
+  catch(err)
+  {
+    throw createError(500, err)
+  }
+}
+
+module.exports = { payment, paymentSuccess , paymentFailure};

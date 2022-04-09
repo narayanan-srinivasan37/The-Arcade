@@ -3,7 +3,8 @@
   justify-content: center;
   flex-direction: column;
   place-items: center;
-  height: 90vh;
+  padding-top: 1rem;
+  overflow: scroll;
 }
 
 .checkout-form {
@@ -11,4 +12,10 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+}
+
+.address-form-err{
+  color:rgb(238, 46, 46) !important;
+  padding-bottom: 0.5rem;
 }

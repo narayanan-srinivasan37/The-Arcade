@@ -50,12 +50,13 @@ min-height: 80vh;
 .billing {
   padding: 1rem;
   min-width: 25%;
-  height: 50%;
+  height: 20%;
 }
 
 .place-order {
   position: relative;
   width: 100%;
+  padding-top: 10px;
 }
 .place-order button {
   background-color: #59a35c; /* Green */
@@ -111,6 +112,6 @@ min-height: 80vh;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    width: 50%;
+    max-width: 50%;
   }
 }

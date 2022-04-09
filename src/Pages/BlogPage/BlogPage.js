@@ -20,8 +20,13 @@ const BlogPage = () => {
       </ComponentLayout>
     );
   }
+  const NoBlogData = ()=>{
+    return(
+        <p>No Blog Available</p>
+    )
+  }
 
-  return <ComponentLayout>{blog && <BlogHome blog={blog} />}</ComponentLayout>;
+  return <ComponentLayout>{blog.length ? <BlogHome blog={blog} />:<NoBlogData/>}</ComponentLayout>;
 };
 
 export default BlogPage;

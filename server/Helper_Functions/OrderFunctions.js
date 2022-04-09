@@ -30,14 +30,27 @@ const findOrderByUserId = async (userId) => {
   }
 };
 
+
 const updateStatus = async (data) => {
   try {
     const order = await pool.query(
-      "UPDATE orders SET status=$1 WHERE userid=$2 returning *",
-      [data.status, data.userid]
+      "UPDATE orders SET status=$1 WHERE userid=$2 and id=$3 returning *",
+      [data.status, data.userid, data.orderid]
     );
   } catch (err) {
     throw createError(500, err);
   }
 };
-module.exports = { createOrder, findOrderByUserId, updateStatus };
+
+const deleteOrderById = async (orderid) => {
+  try {
+    const deleteOrder = await pool.query(
+      `DELETE FROM orders where id= $1`,
+      orderid
+    );
+    return deleteOrder.rows;
+  } catch (err) {
+    throw createError(500, err);
+  }
+};
+module.exports = { createOrder, findOrderByUserId, deleteOrderById, updateStatus , };

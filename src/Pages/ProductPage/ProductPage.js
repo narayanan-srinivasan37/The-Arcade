@@ -11,13 +11,14 @@ const ProductPage = () => {
     const fetchData = async () => {
       try {
         await dispatch(getallProducts());
+     
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
   }, [dispatch]);
-console.log("product", isLoading)
+
   if (isLoading) {
     return (
       <ComponentLayout>
@@ -25,10 +26,10 @@ console.log("product", isLoading)
       </ComponentLayout>
     );
   }
-
+ 
   return (
     <ComponentLayout>
-      {products?.length && <Products products={products} />}
+      {products?.length ? <Products products={products} />:<p>Not Available</p>}
     </ComponentLayout>
   );
 };

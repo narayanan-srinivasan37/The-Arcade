@@ -4,30 +4,33 @@ import { Button } from "@mui/material";
 import TextEditor from "../../TextEditor/TextEditor";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import "./BlogEdit.css";
-import { postABlog } from "../../../API_CALLS/Blog";
-
-const BlogArticle = () => {
+import "./CreateBlog.css";
+import { editABlog } from "../../../API_CALLS/Blog";
+import { useSelector } from "react-redux";
+const CreateBlog = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [blogTitle, setBlogTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [displayImage, setDisplayImage] = useState("");
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
+  const { auth } = useSelector((state) => state);
   const onChange = (editor) => {
     setEditorState(editor);
   };
   const onClick = async () => {
     const content = editorState.getCurrentContent();
     const convert = convertToRaw(content);
-    console.log(convert);
     if (blogTitle.length === 0 || description.length === 0) {
       setShowError(true);
     }
-    const resp = await postABlog({
-      user_id: 1,
+
+    await editABlog({
+      user_id: auth.user.user.user_id,
       description: description,
-      content: convertToRaw(content),
+      content: convert,
       title: blogTitle,
+      displayImage: displayImage,
     });
   };
   return (
@@ -55,11 +58,25 @@ const BlogArticle = () => {
           }}
           label="Description"
           required
+          multiline
+          variant="outlined"
+        />
+        {showError && <div style={{ color: "red" }}>{error}</div>}
+        <TextField
+          style={{ width: "93%", display: "flex", margin: "1rem" }}
+          id="displayimage"
+          value={displayImage}
+          onChange={(e) => {
+            setDisplayImage(e.target.value);
+            if (e.target.value.length > 0) setError(false);
+          }}
+          label="Display Image"
+          required
           variant="outlined"
         />
         {showError && <div style={{ color: "red" }}>{error}</div>}
       </Box>
-      <span style={{ textAlign: "left" }}>Article</span>
+      <span style={{ textAlign: "left", paddingLeft: "1rem" }}>Article</span>
       <TextEditor
         editorState={editorState}
         required
@@ -72,4 +89,4 @@ const BlogArticle = () => {
   );
 };
 
-export default BlogArticle;
+export default CreateBlog;

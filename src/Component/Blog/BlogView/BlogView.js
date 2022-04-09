@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { EditorState, Editor, convertFromRaw } from "draft-js";
+import { AiFillEdit } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./BlogView.css";
 
 const BlogView = ({ blog }) => {
+  const { auth } = useSelector((state) => state);
+  const navigate = useNavigate();
   useEffect(() => {
     if (blog.blog_content) {
       setEditorState(
@@ -42,6 +47,20 @@ const BlogView = ({ blog }) => {
 
   return (
     <div style={{ paddingTop: "1rem", maxWidth: "100%" }}>
+      {auth.isAuthenticated &&
+        auth.user.roles === "admin" &&
+        blog.user_id === auth.user_id && (
+          <div
+            className="edit-button"
+            onClick={() => navigate(`/blog/${blog.id}/edit`)}
+          >
+            <span>
+              <AiFillEdit />
+            </span>
+            <span className="edit-text">&nbsp;Edit</span>
+          </div>
+        )}
+      <h2 style={{ textAlign: "center" }}>{blog.title}</h2>
       {editorState && (
         <div className="RichEditor-editor">
           <Editor

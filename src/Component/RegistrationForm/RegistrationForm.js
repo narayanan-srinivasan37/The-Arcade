@@ -3,10 +3,8 @@ import { Form, Formik, useFormik } from "formik";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import Button from "@mui/material/Button";
-import { BsFacebook, BsGoogle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate ,Link} from "react-router-dom";
-import GoogleLogin from "react-google-login";
+import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../ReduxStore/Reducers/AuthReducer";
 
 const RegistrationForm = () => {
@@ -16,9 +14,8 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const handleGoogleLogin = async () => {};
-
   const validate = (values) => {
+  
     const errors = {};
     if (!values.firstName) {
       errors.firstName = "Required";
@@ -30,6 +27,11 @@ const RegistrationForm = () => {
       errors.password = "Required";
     } else if (values.password < 8) {
       errors.password = "Password should be atleast 8 characters and above";
+    }
+    if (!values.confirmPassword) {
+      errors.confirmPassword = "Required";
+    } else if (values.confirmPassword !== values.password) {
+      errors.confirmPassword = "Password mismatch";
     }
     if (!values.email) {
       errors.email = "Required";
@@ -45,6 +47,7 @@ const RegistrationForm = () => {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   };
   const formik = useFormik({
     initialValues: initialValues,
@@ -52,16 +55,16 @@ const RegistrationForm = () => {
     onSubmit: async (credentials) => {
       try {
         setLoading(true);
-        const response = await dispatch(registerUser(credentials));
+        await dispatch(registerUser(credentials));
         setLoading(false);
-        if (isAuthenticated) navigate("/");
+        navigate("/");
       } catch (err) {
         setError(err);
         setLoading(false);
       }
     },
   });
-
+  if (isAuthenticated) navigate("/");
   return (
     <div className="login-form-div">
       <div className="login-form-inside">
@@ -89,6 +92,9 @@ const RegistrationForm = () => {
             onChange={formik.handleChange}
             value={formik.values.firstName}
           />
+          {formik.errors.firstName ? (
+            <div className="address-form-err">{formik.errors.firstName}</div>
+          ) : null}
           <TextField
             style={{ paddingBottom: "1rem" }}
             id="lastName"
@@ -101,6 +107,9 @@ const RegistrationForm = () => {
             onChange={formik.handleChange}
             value={formik.values.lastName}
           />
+          {formik.errors.lastName ? (
+            <div className="address-form-err">{formik.errors.lastName}</div>
+          ) : null}
           <TextField
             style={{ paddingBottom: "1rem" }}
             id="email"
@@ -113,8 +122,11 @@ const RegistrationForm = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
-
+          {formik.errors.email ? (
+            <div className="address-form-err">{formik.errors.email}</div>
+          ) : null}
           <TextField
+            style={{ paddingBottom: "1rem" }}
             id="password"
             label="Password"
             variant="outlined"
@@ -124,6 +136,24 @@ const RegistrationForm = () => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
+          {formik.errors.password ? (
+            <div className="address-form-err">{formik.errors.password}</div>
+          ) : null}
+          <TextField
+            id="confirmPassword"
+            label="Confirm Password"
+            variant="outlined"
+            placeholder="password"
+            type="password"
+            required
+            onChange={formik.handleChange}
+            value={formik.values.confirmPassword}
+          />
+          {formik.errors.confirmPassword ? (
+            <div className="address-form-err">
+              {formik.errors.confirmPassword}
+            </div>
+          ) : null}
           <div style={{ paddingTop: "1rem" }}>
             <Button type="submit" variant="outlined" endIcon={<SendIcon />}>
               Register
@@ -136,23 +166,7 @@ const RegistrationForm = () => {
             Login
           </Link>
         </p>
-        <p style={{ margin: "0.2rem" }}>Or Sign up using</p>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "0.2rem",
-            paddingBottom: "1rem",
-          }}
-        >
-          <GoogleLogin
-            clientId={process.env.GOOGLE_CLIENT_ID}
-            buttonText="Log in with Google"
-            onSuccess={handleGoogleLogin}
-            onFailure={handleGoogleLogin}
-          />
-        </div>
+      
       </div>
     </div>
   );

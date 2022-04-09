@@ -5,11 +5,11 @@ const created = moment.utc().toISOString();
 
 const createOrderItems = async (data) => {
   try {
-    const { orderid, qty, price, id, name, description } = data;
+    const { orderId, qty, price, id, name, description } = data;
     const orderItems = await pool.query(
       `INSERT INTO orderitems(created,orderid, qty, price, productid, name, description) 
     VALUES($1, $2, $3, $4, $5, $6, $7) returning *`,
-      [created, orderid, qty, price, id, name, description]
+      [created, orderId, qty, price, id, name, description]
     );
     if (orderItems?.rows?.length) return orderItems.rows;
   } catch (err) {
@@ -30,5 +30,16 @@ const findOrderItemsById = async (orderId) => {
     throw createError(500, err);
   }
 };
+const findOrderItemsByUserId = async (userId) => {
+  try {
+    const order = await pool.query("SELECT * from orderitems WHERE userid=$1", [
+      userId,
+    ]);
+    if (order?.rows?.length) return order.rows;
+  } catch (err) {
+    throw createError(500, err);
+  }
+};
 
-module.exports = { createOrderItems, findOrderItemsById };
+
+module.exports = { createOrderItems, findOrderItemsById, findOrderItemsByUserId };

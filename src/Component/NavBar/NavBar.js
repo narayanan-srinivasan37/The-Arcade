@@ -13,18 +13,16 @@ import { logOutUser } from "../../ReduxStore/Reducers/AuthReducer";
 import { useNavigate, useLocation, NavLink, Link } from "react-router-dom";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-const PopOver = ({ navigate }) => {
+const PopOver = ({ navigate, user }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(false);
   const divRef = React.useRef();
   const handleClick = (event) => {
     setAnchorEl(divRef.current);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const handleLogout = () => {
@@ -34,7 +32,7 @@ const PopOver = ({ navigate }) => {
   return (
     <div>
       <Avatar ref={divRef} onClick={handleClick}>
-        A
+        {user.firstName[0]}
       </Avatar>
       <Popover
         id={id}
@@ -44,10 +42,15 @@ const PopOver = ({ navigate }) => {
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
+
         }}
       >
+        <div style={{display:'flex', flexDirection:'column'}}>
         <Button onClick={handleLogout}>Logout</Button>
+        <Button onClick={handleLogout}>My Orders</Button>
+        </div>
       </Popover>
+     
     </div>
   );
 };
@@ -74,10 +77,9 @@ const Cart = (props) => {
 
 const NavBar = () => {
   const location = useLocation();
-
   const navigate = useNavigate();
-
-  const { isAuthenticated } = useSelector((state) => {
+  const { isAuthenticated , user} = useSelector((state) => {
+    
     return state.auth;
   });
   const { cart } = useSelector((state) => state.cart);
@@ -121,9 +123,9 @@ const NavBar = () => {
             </div>
           );
         })}
-
+        
         {isAuthenticated ? (
-          <PopOver navigate={navigate} />
+          <PopOver navigate={navigate} user={user} />
         ) : (
           <Link style={{ color: "black" }} color="inherit" to="/login">
             <LoginIcon />

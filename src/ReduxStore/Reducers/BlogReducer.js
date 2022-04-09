@@ -32,7 +32,7 @@ export const findBlogById = createAsyncThunk(
   }
 );
 
-export const editBlog = createAsyncThunk(
+export const editBlog= createAsyncThunk(
   "blog/editABlog",
   async (param, thunkAPI) => {
     const response = await editABlog(param);

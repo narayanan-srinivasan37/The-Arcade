@@ -1,4 +1,3 @@
-const { response } = require("express");
 const express = require("express");
 const passport = require("passport");
 const { getCartItems } = require("../Helper_Functions/CartItemFunctions");
@@ -35,7 +34,7 @@ authRoutes.post("/register", async (req, res, next) => {
     const { email, password, firstName, lastName } = req.body;
     const newUser = await createUser(email, password, firstName, lastName);
     req.session.userId = newUser.id;
-    console.log(newUser);
+   
     if (newUser) res.status(201).send(newUser);
   } catch (err) {
     next(err);
@@ -45,7 +44,7 @@ authRoutes.delete("/logout", async (req, res, next) => {
   try {
     req.logout();
     req.session.destroy();
-    console.log("session");
+
     res.clearCookie("connect.sid").send("loggedout successfully");
   } catch (err) {
     next(err);

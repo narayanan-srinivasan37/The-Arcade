@@ -1,30 +1,35 @@
 import React, { useState } from "react";
-import {
-  CardElement,
-  useStripe,
-  useElements,
-  Elements,
-  createPaymentMethod,
-} from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { checkisLoggedIn } from "../../ReduxStore/Reducers/AuthReducer";
 import "./CardForm.css";
 import { useNavigate } from "react-router-dom";
-import Loader from "../Loader/Loader";
-import { payment } from "../../API_CALLS/Payment";
-const CardForm = () => {
+import { useSelector , useDispatch} from "react-redux";
+import { payment, paymentFailure, paymentSuccess } from "../../API_CALLS/Payment";
+const CardForm = ({ previousStep, addressData, nextStep }) => {
   const navigate = useNavigate();
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
+  const dispatch = useDispatch()
+  const { cart, auth } = useSelector((state) => state);
   const elements = useElements();
   const processPayment = async (e) => {
     e.preventDefault();
+    const response = dispatch(checkisLoggedIn());
+   
     if (!stripe || !elements) {
       return;
     }
     try {
-      const data = await payment("124", "narayanansrinivasan37@gamil.com");
+      const getTotal = cart?.cart?.reduce((total, amount) => {
+        
+        return total + Number(amount.subtotal);
+      }, 0);
+     
+      const data = await payment(getTotal, auth.user.email, addressData);
+  
       const cardElement = elements.getElement(CardElement);
-      const confirm = await stripe.confirmCardPayment(data.client_secret, {
+      const confirm = await stripe.confirmCardPayment(data.result.client_secret, {
         payment_method: {
           card: cardElement,
           billing_details: {
@@ -34,13 +39,16 @@ const CardForm = () => {
       });
       if (confirm.error) {
         // Show error to your customer (for example, insufficient funds)
-        console.log(confirm.error.message);
+        const failure = await paymentFailure(data.orderId)
+      
       }
       if (confirm.paymentIntent.status === "succeeded") {
+       
+        const success = await paymentSuccess(data.orderId)
         setSuccess(true);
         navigate("/");
       }
-      console.log(confirm);
+      
     } catch (err) {
       throw err;
     }
@@ -66,14 +74,28 @@ const CardForm = () => {
                 },
               }}
             />
-
-            <button
-              className="pay-button"
-              disabled={isPaymentLoading}
-              onClick={processPayment}
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
             >
-              {isPaymentLoading ? "Loading..." : "Pay"}
-            </button>
+              <button
+                className="pay-button"
+                disabled={isPaymentLoading}
+                onClick={previousStep}
+              >
+                Previous
+              </button>
+              <button
+                className="pay-button"
+                disabled={isPaymentLoading}
+                onClick={processPayment}
+              >
+                {isPaymentLoading ? "Loading..." : "Pay"}
+              </button>
+            </div>
           </div>
         </form>
       </div>
