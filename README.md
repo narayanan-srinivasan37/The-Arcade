@@ -5,8 +5,8 @@ A small full stack gaming news feed, blog and an e-commerce application built wi
 [![ERD](https://raw.githubusercontent.com/narayanan-srinivasan37/The-Arcade/master/.github/images/db_schema.png)](https://dbdiagram.io/d/625183312514c97903fe36c8)
 
 ## Screenshot
-![Demo] (https://raw.githubusercontent.com/narayanan-srinivasan37/The-Arcade/master/.github/screenshot1.jpg)
-![Demo] (https://raw.githubusercontent.com/narayanan-srinivasan37/The-Arcade/master/.github/screenshot2.jpeg)
+[![Demo] (https://raw.githubusercontent.com/narayanan-srinivasan37/The-Arcade/master/.github/screenshot1.jpg)]
+[![Demo] (https://raw.githubusercontent.com/narayanan-srinivasan37/The-Arcade/master/.github/screenshot2.jpeg)]
 
 ## Table of Contents
 * [Technologies](#technologies)
