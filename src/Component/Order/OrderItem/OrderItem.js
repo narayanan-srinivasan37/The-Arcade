@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import { Typography } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
+import React from "react";
+import { Typography, InputLabel } from "@mui/material";
 import { formatCurrency } from "../../../HelperFunctions/FormatCurrency";
 import { createTheme } from "@mui/material/styles";
-import "./CartItem.css";
+
 
 const theme = createTheme({
   palette: {
@@ -16,7 +12,6 @@ const theme = createTheme({
     },
   },
 });
-
 const OrderItem = ({ item }) => {
   return (
     <div className="cart-box">
@@ -33,30 +28,13 @@ const OrderItem = ({ item }) => {
           <div className="cart-item-title-qty">
             <Typography>{item.name}</Typography>
             <div>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel aria-label="quantity" id="cart-item-qty">
-                  Qty
+            <InputLabel aria-label="quantity" id="cart-item-qty">
+                  Qty: {item.quantity}
                 </InputLabel>
-                <Select
-                  labelId="cart-item-qty"
-                  id="qty-select"
-                  value={qty}
-                  label="Qty"
-                  onChange={handleChange}
-                >
-                  {[1, 2, 3, 4, 5].map((value, index) => {
-                    return (
-                      <MenuItem key={index} value={value}>
-                        {value}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
             </div>
           </div>
           <Typography aria-label="price">
-            {formatCurrency(item.subtotal)}
+            {formatCurrency(item.price)}
           </Typography>
         </div>
       </div>

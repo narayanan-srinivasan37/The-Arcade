@@ -5,8 +5,10 @@ import TextEditor from "../../TextEditor/TextEditor";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import "./CreateBlog.css";
-import { editABlog } from "../../../API_CALLS/Blog";
+import { postABlog} from "../../../API_CALLS/Blog";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ThirtyFpsOutlined } from "@mui/icons-material";
 const CreateBlog = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [blogTitle, setBlogTitle] = useState("");
@@ -14,24 +16,30 @@ const CreateBlog = () => {
   const [displayImage, setDisplayImage] = useState("");
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
-  const { auth } = useSelector((state) => state);
+  const navigate = useNavigate()
   const onChange = (editor) => {
     setEditorState(editor);
   };
   const onClick = async () => {
-    const content = editorState.getCurrentContent();
+  try{  const content = editorState.getCurrentContent();
     const convert = convertToRaw(content);
     if (blogTitle.length === 0 || description.length === 0) {
       setShowError(true);
     }
 
-    await editABlog({
-      user_id: auth.user.user.user_id,
+    await postABlog({
       description: description,
       content: convert,
       title: blogTitle,
       displayImage: displayImage,
     });
+   navigate("/blog")
+  }
+    catch(err)
+    {
+      setShowError(true)
+    }
+
   };
   return (
     <div style={{ paddingTop: "1rem", maxWidth: "100%" }}>
@@ -72,6 +80,7 @@ const CreateBlog = () => {
           }}
           label="Display Image"
           required
+          aria-label="enter image url"
           variant="outlined"
         />
         {showError && <div style={{ color: "red" }}>{error}</div>}

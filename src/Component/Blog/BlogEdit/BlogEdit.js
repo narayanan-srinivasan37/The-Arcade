@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import TextEditor from "../../TextEditor/TextEditor";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-
 import "./BlogEdit.css";
 import { editABlog } from "../../../API_CALLS/Blog";
 
@@ -40,7 +39,6 @@ const BlogEdit = ({ blog }) => {
     try {
       const resp = await editABlog({
         id: blog.id,
-        user_id: blog.user_id,
         description: description,
         content: convertToRaw(content),
         title: blogTitle,

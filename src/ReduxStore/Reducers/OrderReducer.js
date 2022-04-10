@@ -9,7 +9,8 @@ const initialState = {
 export const getAllOrders = createAsyncThunk(
   "order/getAllOrders",
   async (params, thunkAPI) => {
-    const response = await getOrders(params);
+    const response = await getOrders();
+    
     return response;
   }
 );
@@ -21,8 +22,13 @@ const orderSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
+    [getAllOrders.pending]: (state, action) => {
+      state.isLoading = true;
+      state.orders = [];
+      state.error = null;
+    },
     [getAllOrders.fulfilled]: (state, action) => {
-      state.orders = state.payload;
+      state.orders = action.payload;
       state.isLoading = false;
     },
     [getAllOrders.rejected]: (state, action) => {

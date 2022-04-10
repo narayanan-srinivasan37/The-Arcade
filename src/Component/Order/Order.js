@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import CartItem from "./CartItem/CartItem";
-import "./Cart.css";
+import OrderItem from "./OrderItem/OrderItem";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { BsCartDash } from "react-icons/bs";
+import './Order.css'
 import { formatCurrency } from "./../../HelperFunctions/FormatCurrency";
 const getTotalList = (total,  shipping_charges) => [
   {
@@ -18,9 +18,9 @@ const getTotalList = (total,  shipping_charges) => [
   },
 ];
 
-const Order= ({ cart }) => {
-  const navigate = useNavigate();
-  if (cart?.length === 0) {
+const Order= ({ order}) => {
+
+  if (order?.length === 0) {
     return (
       <div className="empty-cart">
         <h1>No Orders are made</h1>
@@ -38,64 +38,31 @@ const Order= ({ cart }) => {
       </div>
     );
   }
-
-  const getTotal = cart?.reduce((total, amount) => {
-    return total + Number(amount.subtotal);
-  }, 0);
-
-  const subtotal_list = getTotalList(getTotal, 0, 0);
-  const total = subtotal_list.reduce((total, amount) => {
-    return total + Number(amount.value);
-  }, 0);
+  
   return (
-    <div className="cart-root">
-      <div className="cart">
-        {cart.map((item, index) => {
-          return <CartItem key={index} item={item} />;
-        })}
-      </div>
-      <div style={{ minWidth: "30%" }}>
-        <div className="billing ">
-          <h3 style={{}} >
-            Billing Details:
-          </h3>
-          <div className="side-box">
-            <Typography className="price-list" variant="h6">
-              Price Details
-            </Typography>
-
-            <ul className="sub-total">
-              {subtotal_list.map((listValue, index) => {
-                return (
-                  <li key={index}>
-                    {listValue.name}
-                    <span>{formatCurrency(listValue.value)}</span>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="total">
-              Total
-              <span style={{ float: "right" }}>{formatCurrency(total)}</span>
-            </div>
-          </div>
-        </div>
-        <div className="place-order">
-          <div style={{ padding: " 0.5rem 1rem" }}>
+    <div className="order-root">
+      <p className="my-order" > My Orders</p>
+      {
+        order.map((data, index)=>{
+          const date = new Date(data.created).toDateString()
+          console.log(date, data.created)
+          return (
+            <div className="order">
+              <div className="order-id">
+              <span>Order ID : {data.id}</span>
+              <span style={{display:'flex',justifyContent:'flex-end'}}>{date}</span>
+              </div>
+              {
+            data.orderitems.map((item, index)=>{
+            return (
             <div>
-            <button
-              onClick={() => {
-                navigate("/checkout");
-              }}
-              type="button"
-              style={{ float: "right" }}
-            >
-              Place Order
-            </button>
-            </div>
+            <OrderItem key={index} item={item} /></div>)
+          })}
+          <p className="order-total">Total : {formatCurrency(data.total)}</p>
           </div>
-        </div>
-      </div>
+          )
+        })
+      }
     </div>
   );
 };

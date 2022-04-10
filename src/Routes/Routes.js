@@ -14,6 +14,7 @@ import BlogViewPage from "../Pages/BlogViewPage/BlogViewPage";
 import BlogCreatePage from "../Pages/BlogCreatePage/BlogCreatePage";
 import BlogEditPage from "../Pages/BlogEditPage/BlogEditPage";
 import ProductsViewPage from "../Pages/ProductsViewPage/ProductsViewPage";
+import OrderPage from "../Pages/OrderPage/OrderPage";
 const PageRoutes = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -73,7 +74,7 @@ const PageRoutes = () => {
           exact
           element={
             <PrivateRoute>
-              <CheckoutPage />
+              <OrderPage />
             </PrivateRoute>
           }/>
       </Routes>

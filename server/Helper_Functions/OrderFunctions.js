@@ -9,9 +9,9 @@ const createOrder = async (data) => {
     const currentStatus = data.status || "Pending";
 
     const order = await pool.query(
-      `INSERT INTO orders(total,status,userid,created,modified) 
-    VALUES($1, $2, $3, $4, $5) returning *`,
-      [data.total, currentStatus, data.userid, created, modified]
+      `INSERT INTO orders(total,status,userid,created,modified, address) 
+    VALUES($1, $2, $3, $4, $5, $6) returning *`,
+      [data.total, currentStatus, data.userid, created, modified, data.address]
     );
     if (order?.rows?.length) return order.rows;
   } catch (err) {

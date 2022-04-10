@@ -4,14 +4,13 @@ import { AiFillEdit } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./BlogView.css";
-
 const BlogView = ({ blog }) => {
   const { auth } = useSelector((state) => state);
   const navigate = useNavigate();
   useEffect(() => {
     if (blog.blog_content) {
       setEditorState(
-        EditorState.createWithContent(convertFromRaw(blog.blog_content))
+        EditorState.createWithContent(convertFromRaw(JSON.parse(blog.blog_content)))
       );
     } else {
       setEditorState(EditorState.createEmpty());

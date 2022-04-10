@@ -1,6 +1,7 @@
 .cart {
   border: 1px #eee solid;
   width: 70%;
+  margin: 1rem;
 }
 
 .empty-cart{

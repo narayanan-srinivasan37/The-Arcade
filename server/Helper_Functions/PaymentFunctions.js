@@ -8,7 +8,7 @@ const { getCartItems , deleteItems} = require("./CartItemFunctions");
 const {findOneByUserId} = require('./CartFunctions')
 const payment = async (amount, email, userId, address) => {
   try {
-    const orderCreation = await createOrder({ total: amount, userid: userId });
+    const orderCreation = await createOrder({ total: amount, userid: userId , address:address});
     const order = await getCartItems(userId);
     const result = await stripe.paymentIntents.create({
       amount: amount * 100,
@@ -33,6 +33,7 @@ const paymentSuccess = async (userid, orderid) => {
       try {
         
         const data = {
+          userId:userid,
           orderId: orderid,
           ...item,
         };
@@ -50,9 +51,10 @@ const paymentSuccess = async (userid, orderid) => {
     throw createError(500, err);
   }
 };
-const paymentFailure = async(userid)=>{
+const paymentFailure = async(userid, orderid)=>{
   try{
-    const statusUpdate = await updateStatus({ status: "Failed", userid: userid });
+
+    const statusUpdate = await updateStatus({ status: "Failed", userid: userid,   orderid:orderid });
     return {status:"Payment Failed"};
   }
   catch(err)

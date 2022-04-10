@@ -2,9 +2,6 @@ const express = require("express");
 const productRoutes = express.Router();
 const {
   getAllProducts,
-  updateProducts,
-  getProductsByName,
-  deleteProducts,
   getProductById,
 } = require("../Helper_Functions/ProductFunctions");
 

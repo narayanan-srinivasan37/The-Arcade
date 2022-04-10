@@ -32,6 +32,7 @@ const Bloglist = ({ blog }) => {
     <div className="blog-head">
       {blog.length &&
         blog.map((data, index) => {
+          console.log(data)
           if (index % 2 == 0) {
             return (
               <div className="poster-grid" key={data.id}>

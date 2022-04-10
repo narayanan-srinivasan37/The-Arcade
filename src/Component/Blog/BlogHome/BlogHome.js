@@ -1,5 +1,5 @@
 import React from "react";
-import BlogHeader from "../BlogHeader/BlogHeader";
+
 import Bloglist from "../Bloglist/BlogList";
 import { useSelector } from "react-redux";
 import { Button } from "@mui/material";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const BlogHome = ({ blog }) => {
   const { auth } = useSelector((state) => state);
   const navigate = useNavigate()
-
+console.log(auth)
   return (
     <div>
       {auth.isAuthenticated && auth.user.roles === "admin" && (

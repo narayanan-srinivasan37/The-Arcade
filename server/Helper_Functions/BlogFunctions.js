@@ -25,23 +25,25 @@ const findAllBlogs = async () => {
     throw createError(500, err);
   }
 };
-const createABlog = async (userId, title, description, content) => {
+const createABlog = async (title, description, content, userId, displayImage) => {
   try {
+    console.log(displayImage)
     const newBlog = await pool.query(
-      "INSERT into blog(title, user_id, blog_content, description) VALUES($1, $2, $3, $4)",
-      [title, userId, content, description]
+      "INSERT into blog(title, user_id, blog_content, description, display_image) VALUES($1, $2, $3, $4, $5)",
+      [title, userId, content, description, displayImage]
     );
+    console.log(newBlog)
     return newBlog;
   } catch (err) {
     throw new createError(500, err);
   }
 };
 
-const editABlog = async (content, title, description, id, user_id) => {
+const editABlog = async (content, title, description, id, userId) => {
   try {
     const editBlog = await pool.query(
       "UPDATE blog set blog_content=$1, description = $2, title=$3 where id=$4 and user_id=$5",
-      [content, description, title, id, user_id]
+      [content, description, title, id, userId]
     );
    
     if (editBlog.rowCount !== 0) {

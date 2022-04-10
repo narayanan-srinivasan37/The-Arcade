@@ -5,11 +5,11 @@ const created = moment.utc().toISOString();
 
 const createOrderItems = async (data) => {
   try {
-    const { orderId, qty, price, id, name, description } = data;
+    const { orderId, qty, price, id, name, description, userId } = data;
     const orderItems = await pool.query(
-      `INSERT INTO orderitems(created,orderid, qty, price, productid, name, description) 
-    VALUES($1, $2, $3, $4, $5, $6, $7) returning *`,
-      [created, orderId, qty, price, id, name, description]
+      `INSERT INTO orderitems(created,orderid, qty, price, productid, name, description, userid) 
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8) returning *`,
+      [created, orderId, qty, price, id, name, description, userId]
     );
     if (orderItems?.rows?.length) return orderItems.rows;
   } catch (err) {
@@ -32,7 +32,11 @@ const findOrderItemsById = async (orderId) => {
 };
 const findOrderItemsByUserId = async (userId) => {
   try {
-    const order = await pool.query("SELECT * from orderitems WHERE userid=$1", [
+    const order = await pool.query(`SELECT u.created, u.id, u.total, json_agg(json_build_object('name',p.name,
+    'price', p.price,'quantity', o.qty,'description', 
+    p.description, 'image_url', p.image_url)) as orderItems from orders u
+    join orderitems o on u.id = o.orderid join products p on o.productid = p.id 
+    where o.userid = $1 group by u.id`, [
       userId,
     ]);
     if (order?.rows?.length) return order.rows;

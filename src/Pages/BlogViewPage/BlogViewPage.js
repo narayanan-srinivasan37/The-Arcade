@@ -23,13 +23,16 @@ const BlogViewPage = () => {
       </ComponentLayout>
     );
   }
+  console.log(blog)
   const NoBlogData = () => {
-    return <p>No Blog Available</p>;
+    return <div className="empty-cart">
+  <h1>No Blog Available</h1>
+  </div>
   };
 
   return (
     <ComponentLayout>
-      {blog.length ? <BlogView blog={blog} /> : <NoBlogData />}
+      {Object.keys(blog).length ? <BlogView blog={blog} /> : <NoBlogData />}
     </ComponentLayout>
   );
 };

@@ -28,6 +28,7 @@ export const findBlogById = createAsyncThunk(
   "blog/blogById",
   async (params, thunkAPI) => {
     const response = await getBlogById(params);
+    console.log(response)
     return response;
   }
 );
